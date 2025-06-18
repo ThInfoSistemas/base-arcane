@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rolepermissions',
     'usuarios',
     'oraculo',
+    'django_q',
 ]
 
 ROLEPERMISSIONS_MODULE = 'core.roles'
@@ -144,3 +145,11 @@ MESSAGE_TAGS = {
 from decouple import config
 
 OPENAI_API_KEY=config('OPENAI_API_KEY')
+
+Q_CLUSTER = {
+    "name": "pythonando",
+    "workers": 1,
+    "retry": 120,
+    "queue_limit": 50,
+    "orm": "default",
+}

@@ -7,11 +7,12 @@ from langchain_community.vectorstores import FAISS
 import os
 from django.conf import settings
 from .utils import gerar_documentos
+from django_q.tasks import async_task
 
 @receiver(post_save, sender=Treinamentos)
 def signals_treinamento_ia(sender, instance, created, **kwargs):
     if created:
-        task_treinar_ia(instance.id)
+        async_task(task_treinar_ia, instance.id)
 
 
 
