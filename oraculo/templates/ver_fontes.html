@@ -37,30 +37,36 @@
 
                     <div class="divide-y divide-gray-200 space-y-6">
                        
-                            <div class="pt-4 first:pt-0">
+                            {% for contexto in pergunta.data_treinamento.all %}
+                                <div class="pt-4 first:pt-0">
 
-                                <!-- Header opcional -->
-                               
-                                    <div class="mb-2 text-sm text-gray-500 font-medium flex items-center gap-2">
-                                        Página encontrada - 0
+                                    <!-- Header opcional -->
+                                    {% if contexto.metadata.source %}
+                                        <div class="mb-2 text-sm text-gray-500 font-medium flex items-center gap-2">
+                                            Página encontrada - {{ contexto.metadata.page }}
+                                        </div>
+                                    {% endif %}
+
+                                    <!-- Conteúdo do chunk -->
+                                    <div class="text-gray-900 text-sm">
+                                        {{ contexto.texto }}
                                     </div>
-                               
 
-                                <!-- Conteúdo do chunk -->
-                                <div class="text-gray-900 text-sm">
-                                    O Perceptron é ...
+                                    <!-- Link do arquivo -->
+                                    {% if contexto.metadata.url %}
+                                        <div class="mt-3">
+                                            <a href="{{ contexto.metadata.url.0 }}" target="_blank"
+                                            class="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-800 transition">
+                                                Acessar arquivo
+                                            </a>
+                                        </div>
+                                    {% else %}
+                                        <p class="mt-2 text-sm text-gray-400 italic">Fonte não disponível</p>
+                                    {% endif %}
                                 </div>
-
-                                <!-- Link do arquivo -->
-                               
-                                    <div class="mt-3">
-                                        <a href="" target="_blank"
-                                        class="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-800 transition">
-                                            Acessar arquivo
-                                        </a>
-                                    </div>
-                                
-                            </div>
+                            {% empty %}
+                                <p class="text-gray-500 text-sm">Nenhum contexto relacionado a esta pergunta.</p>
+                        {% endfor %}
                         
                     </div>
                 </div>
