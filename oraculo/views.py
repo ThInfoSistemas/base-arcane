@@ -1,16 +1,28 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rolepermissions.checkers import has_permission
 from django.http import Http404
 from django.views.decorators.csrf import csrf_exempt
+from .models import Treinamentos
 
 def treinar_ia(request):
     if not has_permission(request.user, 'treinar_ia'):
         raise Http404()
     if request.method == 'GET':
+        #tasks = Task.objects.all()
         return render(request, 'treinar_ia.html')
-    elif request.mehod == 'POST':
-        # TODO: Tarefa 1 - Desenvolver o salvamento do arquivo
-        ...
+    elif request.method == 'POST':
+        site = request.POST.get('site')
+        conteudo = request.POST.get('conteudo')
+        documento = request.FILES.get('documento')
+
+        treinamento = Treinamentos(
+            site=site,
+            conteudo=conteudo,
+            documento=documento
+        )
+        treinamento.save()
+
+        return redirect('treinar_ia')
 
 
 @csrf_exempt
