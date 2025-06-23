@@ -83,6 +83,11 @@
         event.preventDefault();
 
         const pergunta = document.getElementById('pergunta').value;
+
+        document.getElementById('pergunta').value = "";
+        document.getElementById('pergunta').focus();
+
+
         const formData = new FormData();
         formData.append('pergunta', pergunta);
 
