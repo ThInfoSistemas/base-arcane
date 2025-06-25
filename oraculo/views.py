@@ -12,6 +12,11 @@ from langchain_community.vectorstores import FAISS
 from pathlib import Path
 from django.http import StreamingHttpResponse
 from django.conf import settings
+import json
+from django.http import HttpResponse
+from django.core.cache import cache
+from .utils import sched_message_response
+
 
 def treinar_ia(request):
     if not has_permission(request.user, 'treinar_ia'):
@@ -100,3 +105,17 @@ def ver_fontes(request, id):
     print(pergunta.pergunta)
 
     return render(request, 'ver_fontes.html', {'pergunta': pergunta})
+
+@csrf_exempt
+def webhook_whatsapp(request):
+    # Validar API KEY e event
+    data = json.loads(request.body)
+    phone = data.get('data').get('key').get('remoteJid').split('@')[0]
+    message = data.get('data').get('message').get('extendedTextMessage').get('text')
+
+    buffer = cache.get(f"wa_buffer_{phone}", [])
+    buffer.append(message)
+
+    cache.set(f"wa_buffer_{phone}", buffer, timeout=120)
+
+    sched_message_response(phone)

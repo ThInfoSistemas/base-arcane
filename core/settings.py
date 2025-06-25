@@ -153,3 +153,10 @@ Q_CLUSTER = {
     "queue_limit": 50,
     "orm": "default",
 }
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'TIMEOUT': 120,
+    }
+}
